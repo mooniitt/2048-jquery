@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>2048</title>
+	<script src="./bower_components/jquery/dist/jquery.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="./mian.css">	
+</head>
+<body>
+	<div id="app">
+		<div id="wrap">
+			<div>1</div>
+			
+		</div>
+	</div>
+</body>
+<script>
+	$(document).ready(function(){
+		var _2048 = function(){
+			this.opt = {
+				_el:$("#wrap").children(),
+				_left:1
+			}
+		}
+		_2048.prototype = {
+			init : function(){
+				var $el = this.opt._el
+				$el.each(function(){
+
+				})
+			},
+			register_control : function(){
+
+			}
+		}
+		var __2048 = new _2048()
+		__2048.init()
+	})
+</script>
+</html>
