@@ -3,14 +3,13 @@
 <head>
 	<meta charset="UTF-8">
 	<title>2048</title>
+	<link rel="stylesheet" type="text/css" href="./main.css">
 	<script src="./bower_components/jquery/dist/jquery.min.js"></script>
-	<link rel="stylesheet" type="text/css" href="./mian.css">	
 </head>
 <body>
 	<div id="app">
 		<div id="wrap">
-			<div>1</div>
-			
+			<div class="_32"><span class="l2">48</span></div>
 		</div>
 	</div>
 </body>
@@ -19,18 +18,50 @@
 		var _2048 = function(){
 			this.opt = {
 				_el:$("#wrap").children(),
-				_left:1
+				_left:37,_a:65,
+				_up:38,_w:87,
+				_right:39,_d:68,
+				_down:40,_s:83,
+				coordinate:{
+					r1_c1:0
+				}
 			}
 		}
 		_2048.prototype = {
 			init : function(){
 				var $el = this.opt._el
-				$el.each(function(){
-
-				})
+				this.register_control()
 			},
 			register_control : function(){
-
+				var _this = this
+					,$el = _this.opt._el
+					,opt = _this.opt
+				$(window).keydown(function(e){
+					//console.log(e.keyCode)
+					switch(e.keyCode){
+						case opt._a:
+						case opt._left:_this.leftDone();break;
+						case opt._w:
+						case opt._up:_this.upDone();break;
+						case opt._d:
+						case opt._right:_this.rightDone();break;
+						case opt._s:
+						case opt._down:_this.downDone();break;
+					}
+				})
+				console.log("register on")
+			},
+			leftDone : function(){
+				console.log('left')
+			},
+			upDone : function(){
+				console.log('up')
+			},
+			rightDone : function(){
+				console.log('right')
+			},
+			downDone : function(){
+				console.log('down')
 			}
 		}
 		var __2048 = new _2048()
