@@ -10,23 +10,27 @@ body {
 	position: relative;
 	border-radius: 3px;
 	box-shadow: 0 1px 1px white;
-	padding: 10px;
-	width: 294px;
-	height: 294px;
-	margin: 20px auto 0;
+	padding: 12px;
+	width: 270px;
+	height: 270px;
+	margin: 100px auto 0;
 	background-color: #f2eada;
+	transform: scale(1.5);
 }
 #wrap {
 	position: absolute;
-	width: 294px;
-	height: 294px;
+	width: 270px;
+	height: 270px;
 }
 #wrap div {
 	position: absolute;
 	width: 60px;
 	height: 60px;
 	box-shadow: 0 0 2px 1px #333;
-	border-radius: 2px;
+	border-radius: 1px;
+	left: 80px;
+	top: 0px;
+	background-color: #f6f5ec;
 }
 #wrap span {
 	display: inline-block;
@@ -59,36 +63,36 @@ body {
 	font-size: 24px;
 	line-height: 32px;
 }
-._2 {
+#wrap ._2 {
 	background-color: #008792;	
 }
-._4 {
+#wrap ._4 {
 	background-color: #78cdd1;	
 }
-._8 {
+#wrap ._8 {
 	background-color: #00a6ac;
 }
-._16 {
+#wrap ._16 {
 	background-color: #50b7c1;
 }
-._32 {
+#wrap ._32 {
 	background-color: #70aa9f;
 }
-._64 {
+#wrap ._64 {
 	background-color: #508a88;
 }
-._128 {
+#wrap ._128 {
 	background-color: #00ae9d;
 }
-._256 {
+#wrap ._256 {
 	background-color: #f58220;
 }
-._512 {
+#wrap ._512 {
 	background-color: #65c294;
 }
-._1024 {
+#wrap ._1024 {
 	background-color: #73b9a2;
 }
-._2048 {
+#wrap ._2048 {
 	background-color: #72baa7;
 }

@@ -9,59 +9,238 @@
 <body>
 	<div id="app">
 		<div id="wrap">
-			<div class="_32"><span class="l2">48</span></div>
+			<!--<div class="_2"><span class="l1">2</span></div>-->
 		</div>
 	</div>
 </body>
 <script>
 	$(document).ready(function(){
 		var _2048 = function(){
+			var step = 70
 			this.opt = {
-				_el:$("#wrap").children(),
-				_left:37,_a:65,
-				_up:38,_w:87,
-				_right:39,_d:68,
-				_down:40,_s:83,
-				coordinate:{
-					r1_c1:0
-				}
+				_el:$("#wrap"),
+				_left:37,_up:38,_right:39,_down:40,
+				_a:65,_w:87,_d:68,_s:83,
+				step:70,
+				coordinate:[//4*4 每块的位置
+					[0,0],[step,0],[step*2,0],[step*3,0],
+					[0,step],[step,step],[step*2,step],[step*3,step],
+					[0,step*2],[step,step*2],[step*2,step*2],[step*3,step*2],
+					[0,step*3],[step,step*3],[step*2,step*3],[step*3,step*3]],
+				b:$("#wrap div"),
+				map : []
 			}
 		}
 		_2048.prototype = {
-			init : function(){
-				var $el = this.opt._el
-				this.register_control()
+			init : function(){ //初始化
+				var _this = this
+					,$wrap = _this.opt._el
+					,html = "<div><span><\/span><\/div>"
+					,coordinate = _this.opt.coordinate
+					,map = _this.opt.map
+				_this.register_control()
+				for(var i = 0; i < 16; i ++){
+					$wrap.append(html)
+					map[i] = '0'
+				}
+				$wrap.children().each(function(index){
+					var left = coordinate[index][0]
+						,top = coordinate[index][1]
+					$(this).css({left:left,top:top})
+				})
+				console.log("init : "+map)
+				_this.randomBlock(map)
+				_this.renderMap(map)
+				//_this.moveBlock(_this.opt.direct,map)
 			},
-			register_control : function(){
+			register_control : function(){//注册控制器
 				var _this = this
 					,$el = _this.opt._el
 					,opt = _this.opt
 				$(window).keydown(function(e){
-					//console.log(e.keyCode)
 					switch(e.keyCode){
 						case opt._a:
-						case opt._left:_this.leftDone();break;
+						case opt._left:_this.leftDone();break
 						case opt._w:
-						case opt._up:_this.upDone();break;
+						case opt._up:_this.upDone();break
 						case opt._d:
-						case opt._right:_this.rightDone();break;
+						case opt._right:_this.rightDone();break
 						case opt._s:
-						case opt._down:_this.downDone();break;
+						case opt._down:_this.downDone();break
 					}
 				})
-				console.log("register on")
 			},
+
 			leftDone : function(){
-				console.log('left')
+				this.show("left")
 			},
 			upDone : function(){
-				console.log('up')
+				this.show("up")
 			},
 			rightDone : function(){
-				console.log('right')
+				this.show("right")
 			},
 			downDone : function(){
-				console.log('down')
+				this.show("down")
+			},
+			randomBlock : function(map){//随机生成一块
+				var locShow = [],n=0
+				for(var i=0;i<16;i++){
+					if(map[i] == '0'){
+						locShow.push(i) 
+					}
+				}
+				if(!!!locShow.length){
+					console.log("full")
+					return
+				}
+				console.log("-----locShow : "+locShow)
+				console.log("locShow.length ： "+locShow.length)
+				n = Math.floor(Math.random()*locShow.length)
+				console.log("n : "+n)
+				map[locShow[n]] = Math.ceil(Math.random()*2)*2+''
+				//map[locShow[n]] = 2+''
+				console.log("randomBlock : "+map)
+				console.log("this.opt.map : "+this.opt.map)
+				return map
+			},
+			moveBlock : function(direct,map){//方向
+				var _this = this
+					,$div = _this.opt._el.children()
+					_map = []
+					console.log(direct)
+				console.log("1:"+map)
+				_map = _this.removeSpaceBlock(map,direct)
+				console.log("2:"+_map)
+				switch(direct){ //map = [4,2,2,2, 2,2,4,2, 2,2,4,2, 2,2,4,2,]
+					case "left" : 
+						for(var i = 0 ;i < 4;i ++){
+							for(var j = 0 ;j < 4 ;j ++){
+								if(_map[i*4+j] == _map[i*4+j+1]){
+									_map[i*4+j] = (_map[i*4+j]-0)*2+''
+									_map[i*4+j+1] = '0'
+									j++
+								}
+							}
+						}break
+					case "right" :
+						for(var i=0;i<4;i++){
+							for(var j=2;j >= 0;j--){
+								if(_map[i*4+j] == _map[i*4+j+1]){
+									_map[i*4+j] = (_map[i*4+j]-0)*2+''
+									_map[i*4+j+1] = '0'
+									j--
+								}
+							}
+						}break
+					case "up" :
+						for(var i=0;i<4;i++){
+							for(var j=0;j < 4;j++){
+								if(_map[i+j*4] == _map[i+(j+1)*4]){
+									_map[i+j*4] = (_map[i+j*4]-0)*2+''
+									_map[i+(j+1)*4] = '0'
+									j++
+								}
+							}
+						}break
+					case "down" :
+						for(var i=0;i<4;i++){
+							for(var j=3;j>=0;j--){
+								if(_map[i+j*4] == _map[i+(j-1)*4]){
+									_map[i+j*4] = (_map[i+j*4]-0)*2+''
+									_map[i+(j-1)*4] = '0'
+									j--
+								}
+							}
+						}break
+				}
+				_map = _this.removeSpaceBlock(_map,direct)
+				console.log("3:"+_map)
+				return _map
+			},
+			renderMap : function(map){
+				var _this = this
+					,$el = _this.opt._el
+					,$div =	 $el.children("div")
+				$div.each(function(index){
+					var __this = $(this),num = ''
+					__this.removeClass().addClass("_"+map[index])
+					num = (map[index] == 0) ? '':map[index]
+					__this.children("span").removeClass().addClass("l"+map[index].toString().length).text(num)
+				})
+			},
+			removeSpaceBlock : function(map,direct){
+				var _map = [[],[],[],[]],s=[]
+				switch(direct){
+					case "left" : 
+						for(var i =0;i<4;i++){
+							for(var j=0;j<4;j++){
+								_map[i][j] = map[i*4+j]
+							}
+							_map[i] = this.removeZero(_map[i])
+							for(j=0;j<4;j++){
+								s.push(_map[i][j])
+							}
+						}
+						return s
+					case "right" :
+						for(var i=0;i<4;i++){
+							for(var j=0;j<4;j++){
+								_map[i][j] = map[i*4+j]
+							}
+							_map[i] = this.removeZero(_map[i].reverse()).reverse()
+							for(j=0;j<4;j++){
+								s.push(_map[i][j])
+							}
+						}
+						return s
+					case "up" :
+						for(var i=0;i<4;i++){
+							for(var j=0;j<4;j++){
+								_map[i][j] = map[i+j*4]
+							}
+							_map[i] = this.removeZero(_map[i])
+						}
+						for(var i=0;i<4;i++){
+							for(var j=0;j<4;j++){
+								map[i+j*4] = _map[i][j]
+							}
+						}
+						return map
+					case "down" : 
+						for(var i=0;i<4;i++){
+							for(var j=0;j<4;j++){
+								_map[i][j] = map[i+j*4]
+							}
+							_map[i] = this.removeZero(_map[i].reverse()).reverse()
+						}
+						for(var i=0;i<4;i++){
+							for(var j=0;j<4;j++){
+								map[i+j*4] = _map[i][j]
+							}
+						}
+						return map
+				}
+				//return map
+			},
+			removeZero : function(arr){
+				var l = 0
+				arr = arr.filter(function(val){
+					return val != 0 
+				})	
+				l = 4-arr.length
+				for(var i=0;i<l;i++){
+					arr.push('0')
+				}		
+				console.log("removeZero ： "+arr)	
+				return arr
+			},
+			show : function(direct){
+				var _this = this
+				_this.opt.map = _this.moveBlock(direct,_this.opt.map)
+				_this.renderMap(_this.opt.map)
+				_this.randomBlock(_this.opt.map)
+				_this.renderMap(_this.opt.map)
 			}
 		}
 		var __2048 = new _2048()
